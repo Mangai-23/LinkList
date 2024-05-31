@@ -9,7 +9,7 @@ export default  function HeroForm(){
             'localStorage' in window && window.localStorage.getItem('desiredUsername')
         ) {
             const username = window.localStorage.getItem('desiredUsername');
-            //window.localStorage.removeItem('desiredUsername');
+            window.localStorage.removeItem('desiredUsername');
             redirect('/account?username=' + username);
         }  
     },[]);

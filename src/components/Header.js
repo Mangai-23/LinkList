@@ -34,7 +34,6 @@ export default async function Header(){
                         <Link href={'/login'}>Create Account</Link>
                     </>
                 )}
-                
             </nav>
         </div>
   </header>
