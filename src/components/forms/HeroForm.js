@@ -5,12 +5,11 @@ import { useEffect } from "react";
 
 export default  function HeroForm(){
     useEffect(() => {
-        if(
-            'localStorage' in window && window.localStorage.getItem('desiredUsername')
-        ) {
+        if('localStorage' in window && window.localStorage.getItem('desiredUsername')) 
+        {
             const username = window.localStorage.getItem('desiredUsername');
             window.localStorage.removeItem('desiredUsername');
-            redirect('/account?username=' + username);
+            redirect('/account?desiredUsername=' + username);
         }  
     },[]);
     async function handleSubmit(ev){
