@@ -28,7 +28,7 @@ export default  function HeroForm(){
     }
     return(
         <>
-        <form cl
+        <form 
             onSubmit={handleSubmit}
             className="inline-flex items-center shadow-lg shadow-gray-500/20">
                 <span 
