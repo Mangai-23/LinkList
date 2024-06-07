@@ -4,6 +4,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChartLine, faFileLines, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import LogoutButton from "@/components/buttons/LogoutButton";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,16 +20,47 @@ export default async function AppLayout({children}) {
   if(!session){
     return redirect('/');
   }
-  console.log(session);
   return (
     <html lang="en">
       <body className={inter.className}>
         <main className="flex min-h-screen">
-          <aside className="bg-blue-200 w-48 p-4">
-            aside suff
-            <div>
-              <Image src={session.user.image} width={64} height={64} alt={'avatar'}/>
+          <aside className="bg-white w-48 p-4 shadow">
+            <div className="rounded-full overflow-hidden aspect-square w-24 mx-auto">
+              <Image src={session.user.image} width={256} height={64} alt={'avatar'}/>
             </div>
+            <div className="text-center">
+              <nav className="inline-flex mx-auto flex-col text-center mt-12 gap-6 text-gray-700">
+                <Link href={'/account'} className="flex gap-4">
+                  <FontAwesomeIcon 
+                    fixedWidth={true}
+                    icon={faFileLines} 
+                    className="h-6 w-6"
+                  />
+                  <span className="">My Page</span>
+                </Link>
+                <Link href={'/analytics'} className="flex gap-4">
+                <FontAwesomeIcon 
+                  fixedWidth={true}
+                  icon={faChartLine} 
+                  className="h-6 w-6"
+                />
+                  <span className="">Analytics</span>
+                </Link>
+                {/* <button className="flex gap-4">
+                  <FontAwesomeIcon 
+                    fixedWidth={true}
+                    icon={faRightFromBracket} 
+                    className="h-6 w-6 "/>
+                  <span className="">Logout</span>
+                </button> */}
+                <LogoutButton 
+                  iconLeft={true} 
+                  className={'flex gap-4 items-center'} 
+                  iconClasses={'h-6 w-6'}
+                />
+              </nav>
+            </div>
+            
           </aside>
           <div className="p-6 max-w-4xl mx-auto">
           {children}
