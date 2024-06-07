@@ -1,6 +1,8 @@
 'use server'
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Page } from "@/models/page";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 // import { redirect } from "next/navigation";
 
 export default async function grabUsername(formData) {
@@ -19,13 +21,20 @@ export default async function grabUsername(formData) {
             });
         }
 
-        const existingUser = await Page.findOne({ uri: username });
+        const existingUser = await Page.findOne({ 
+            uri: username 
+        });
 
         if (existingUser) {
             return { success: false, message: "Username already taken" };
             // return redirect('/account?usernameTaken=1');
         } else {
-            const newUser = await Page.create({ uri: username });
+            const session = await getServerSession(authOptions);
+            console.log(session?.user?.email);
+            const newUser = await Page.create({ 
+                uri: username,
+                owner:session?.user?.email,
+            });
             return { success: true, data: newUser };
             // return redirect('/account/' + username);
         }

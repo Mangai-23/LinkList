@@ -24,7 +24,7 @@ export default async function Header(){
             <nav className="flex items-center gap-4 text-sm text-slate-500">
                 {!!session && (
                     <>
-                    <Link href={'/profile'}>Hello, {session?.user?.name}</Link>
+                    <Link href={'/account'}>Hello, {session?.user?.name}</Link>
                     <LogoutButton />
                     </>
                 )}
