@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import UsernameForm from "@/components/forms/UsernameForm";
 import { Page } from "@/models/page";
 import connectToDatabase from "@/utils/mongodb";
+import PageSettingsForm from "@/components/forms/PageSettingsForm";
 export default async function AccountPage({searchParams, ...rest}){
     console.log(rest);
     await connectToDatabase();
@@ -15,9 +16,10 @@ export default async function AccountPage({searchParams, ...rest}){
     const page = await Page.findOne({owner:session?.user?.email});
     if(page){
         return (
-            <div> Your Page is: /{page.uri}</div>
+            // <div> Your Page is: /{page.uri}</div>
+            <PageSettingsForm page={page} />
         );
-    }
+    } 
     return (
         <div>
             <UsernameForm desiredUsername={desiredUsername}/>
