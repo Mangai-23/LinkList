@@ -17,7 +17,7 @@ export default async function AccountPage({searchParams, ...rest}){
     if(page){
         return (
             // <div> Your Page is: /{page.uri}</div>
-            <PageSettingsForm page={page} />
+            <PageSettingsForm page={page} user={session.user} />
         );
     } 
     return (

@@ -1,14 +1,18 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+'use client'
 import RadioTogglers from '@/components/buttons/formItems/RadioTogglers';
 import { faImage } from "@fortawesome/free-regular-svg-icons";
-import { faPalette } from "@fortawesome/free-solid-svg-icons";
-import { getServerSession } from 'next-auth';
+import { faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
 import Image from 'next/image';
-export default async function PageSettingsForm({page}) {
-    const session = await getServerSession(authOptions);
+import SubmitButton from '../buttons/SubmitButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+export default function PageSettingsForm({page, user}) {
+    //const session = await getServerSession(authOptions);
+    function saveBaseSettings(formData){
+      console.log(formData.get('displayName'));
+    }
     return(
       <div className="-m-4">
-        <form>
+        <form action={saveBaseSettings}>
             <div className="bg-gray-300 py-16 flex justify-center items-center">
                 <RadioTogglers 
                     options={[
@@ -21,19 +25,43 @@ export default async function PageSettingsForm({page}) {
             <div className='flex justify-center -mb-12'>
                <Image 
                  className='rounded-full relative -top-8 border-4 border-white shadow-lg shadow-black/50' 
-                 src={session.user.image} 
+                 src={user?.image} 
                  alt={'avatar'} 
                  width={128}
                  height={128} />
             </div> 
             <div className='p-4'>
                 <label className="input-label" htmlFor="nameIn">Display Name</label>
-                <input type="text" id="nameIn" placeholder='John Doe' />
+                <input 
+                  className="input-txt" 
+                  type="text" 
+                  id="nameIn" 
+                  name="displayName"
+                  defaultValue={page.displayName}
+                  placeholder='John Doe'
+                 />
                 <label className="input-label" htmlFor="locationIn">Location</label>
-                <input type="text" name="" id="locationIn" placeholder='Somewhere in the world' />
+                <input 
+                  className="input-txt" 
+                  type="text" 
+                  id="locationIn" 
+                  name="location"
+                  defaultValue={page.location}
+                  placeholder='Somewhere in the world' 
+                />
                 <label className="input-label" htmlFor="bioIn">Bio</label>
-                <textarea name="" id="bioIn" placeholder='Your Bio goes here'/>
-                
+                <textarea 
+                  className="input-txt" 
+                  name="bio"
+                  defaultValue={page.bio}
+                  id="bioIn" 
+                  placeholder='Your Bio goes here'/>
+                <div className='max-w-[200px] mx-auto '>
+                  <SubmitButton className="">
+                    <FontAwesomeIcon icon={faSave} className='w-4 h-6'/>
+                    <span>Save </span>
+                  </SubmitButton>
+                </div>
             </div>
         </form>
       </div>
