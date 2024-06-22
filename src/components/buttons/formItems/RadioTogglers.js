@@ -1,7 +1,7 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function RadioTogglers({options}){
+export default function RadioTogglers({options, defaultValue,onChange}){
     return (
         <div className="radio-togglers shadow ">
             {options.map(option => (
@@ -9,6 +9,8 @@ export default function RadioTogglers({options}){
                     <input 
                     type="radio" 
                     name="bgType" 
+                    onClick={e => onChange(e.target.value)}
+                    defaultChecked={defaultValue === option.value}
                     value={option.value}
                     />
                     <div className="gap-2">

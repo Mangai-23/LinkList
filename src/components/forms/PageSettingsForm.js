@@ -5,22 +5,91 @@ import { faPalette, faSave } from "@fortawesome/free-solid-svg-icons";
 import Image from 'next/image';
 import SubmitButton from '../buttons/SubmitButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {savePageSettings} from '@/actions/pageActions';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 export default function PageSettingsForm({page, user}) {
+    const [bgType, setBgType]=useState(page.bgType);
+    const [bgColor, setBgColor] = useState(page.bgColor);
     //const session = await getServerSession(authOptions);
-    function saveBaseSettings(formData){
+    async function saveBaseSettings(formData){
       console.log(formData.get('displayName'));
+      const result = await savePageSettings(formData);
+      if(result){
+        toast.success('Saved!');
+      }
+    }
+    function handleFileUpload(e){
+      const file = e.target.files?.[0];
+      if(file){
+        const data = new FormData;
+        data.set('file', file);
+        fetch('/api/upload',{
+          method: 'POST',
+          body: data,
+        })
+        .then(response => {
+          response.json().then(link =>{
+            console.log(link);
+          })
+        })
+      }
+      // const reader = new FileReader();
+      // reader.readAsDataURL(file);
+      // reader.onloadend = () => {
+      //   setBgType('image');
+      //   setBgColor(reader.result);
+      // }
     }
     return(
       <div className="-m-4">
         <form action={saveBaseSettings}>
-            <div className="bg-gray-300 py-16 flex justify-center items-center">
-                <RadioTogglers 
-                    options={[
-                        {value: 'color',icon: faPalette,label:'Color'},
-                        {value:'image',icon: faImage,label:'Image'},
-                    ]} 
-                 />
-              
+            <div 
+              className="py-16 flex justify-center items-center"
+              style={{
+                backgroundColor: bgColor
+              }}
+            >
+                <div>
+                  <RadioTogglers 
+                      defaultValue={page.bgType}
+                      options={[
+                          {value: 'color',icon: faPalette,label:'Color'},
+                          {value:'image',icon: faImage,label:'Image'},
+                      ]} 
+                      onChange={val => setBgType(val)}
+                  />
+                  {/* Background Color */}
+                  {bgType === 'color' && (
+                      <div className="bg-gray-200 shadow text-gray-700 p-2 mt-2">
+                        <div className='flex justify-center gap-2'>
+                          <span>Background color:</span>
+                          <input 
+                            type="color" 
+                            name='bgColor' 
+                            defaultValue={page.bgColor}
+                            onChange={e => setBgColor(e.target.value)}
+                          />
+                        </div>
+                    </div>
+                    )}
+                  {/* Background Image */}
+                  {bgType === 'image' &&(
+                      <div className='flex justify-center'>
+                        <label 
+                          className='bg-white shadow px-4 py-2 mt-2'
+                        >
+                          <input 
+                            type="file" 
+                            name="image" 
+                            onChange={handleFileUpload}
+                            className='hidden' 
+                          />
+                          <span>Change image</span>
+                        </label>
+                    </div>
+                  )}
+                </div>
             </div>
             <div className='flex justify-center -mb-12'>
                <Image 
